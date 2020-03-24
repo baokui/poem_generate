@@ -9,14 +9,18 @@ def getRaw(path_source,path_target):
             continue
         with open(os.path.join(path_source,file),'r') as f:
             data = f.read().strip().split('\n')[1:]
-        print(file)
+        k = 0
         for i in range(len(data)):
             s = data[i].split(',')
+            if len(s)!=4:
+                continue
+            k+=1
             title,author,content = s[0][1:-1],s[2][1:-1],s[3][1:-1]
             t = '::'.join([title,author,content])
             S.append(t)
             if len(S)%1000==0:
                 print(len(S))
+        print('get %d poems from file %s'%(k,file))
     print('total number is %d'%len(S))
     random.shuffle(S)
     with open(path_target,'w') as f:
