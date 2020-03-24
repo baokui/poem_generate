@@ -7,10 +7,11 @@
    github: https://github.com/hjptriplebee
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
 from config import *
-
+import json
+import numpy as np
 class POEMS:
     "poem class"
-    def __init__(self, filename, isEvaluate=False):
+    def __init__(self, filename, path_word2vec = '',isEvaluate=False):
         """pretreatment"""
         poems = []
         file = open(filename, "r", encoding='utf-8')
@@ -45,6 +46,9 @@ class POEMS:
         wordPairs = sorted(wordFreq.items(), key = lambda x: -x[1])
         self.words, freq = zip(*wordPairs)
         self.wordNum = len(self.words)
+        self.embeding = []
+        if path_word2vec:
+            self.embeding = self.getEmb(path_word2vec)
 
         self.wordToID = dict(zip(self.words, range(self.wordNum))) #word to ID
         poemsVector = [([self.wordToID[word] for word in poem]) for poem in poems] # poem to vector
@@ -57,7 +61,23 @@ class POEMS:
         print("训练样本总数： %d" % len(self.trainVector))
         print("测试样本总数： %d" % len(self.testVector))
 
-
+    def getEmb(self,path_w2v):
+        with open(path_w2v,'r') as f:
+            D = json.load(f)
+        D_w2v = {d:np.array([float(t) for t in D[d]]) for d in D}
+        self.hiddensize = len(D_w2v['了'])
+        emb = np.random.uniform(-0.5,0.5,size=(len(self.words),self.hiddensize))
+        n_in = 0
+        n_out = 0
+        for i in range(len(self.words)):
+            w = self.words[i]
+            if w in D_w2v:
+                emb[i] = D_w2v[w]
+                n_in += 1
+            else:
+                n_out += 1
+        print('pretrain words:in %d-out %d'%(n_in,n_out))
+        return emb
     def generateBatch(self, isTrain=True):
         #padding length to batchMaxLength
         if isTrain:

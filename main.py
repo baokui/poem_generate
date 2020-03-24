@@ -19,7 +19,7 @@ def defineArgs():
 
 if __name__ == "__main__":
     args = defineArgs()
-    trainData = data.POEMS(trainPoems)
+    trainData = data.POEMS(trainPoems,path_word2vec)
     MCPangHu = model.MODEL(trainData)
     if args.mode == "train":
         MCPangHu.train()
