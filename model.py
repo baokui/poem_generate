@@ -148,12 +148,12 @@ class MODEL:
                 exit(1)
             flag = 1
             endSign = {-1: "，", 1: "。"}
-            poem = ''
             state0 = sess.run(stackCell.zero_state(1, tf.float32))
             x = np.array([[self.trainData.wordToID['[']]])
             for character in characters:
                 print('input:%s'%character)
                 for ii in range(num):
+                    poem = ''
                     probs1, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state0})
                     for word in character:
                         if self.trainData.wordToID.get(word) == None:
