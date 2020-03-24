@@ -34,3 +34,5 @@ saveStep = 1000                   # save model every savestep
 # evaluate
 trainRatio = 0.8                    # train percentage
 evaluateCheckpointsPath = "./checkpoints/evaluate"
+
+characters = ['笑傲江湖','生日快乐']

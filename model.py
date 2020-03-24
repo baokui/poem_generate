@@ -130,7 +130,7 @@ class MODEL:
                 poems.append(poem)
             return poems
 
-    def testHead(self, characters):
+    def testHead(self, characters,num=5):
         """write head poem"""
         print("genrating...")
         gtX = tf.placeholder(tf.int32, shape=[1, None])  # input
@@ -149,30 +149,32 @@ class MODEL:
             flag = 1
             endSign = {-1: "，", 1: "。"}
             poem = ''
-            state = sess.run(stackCell.zero_state(1, tf.float32))
+            state0 = sess.run(stackCell.zero_state(1, tf.float32))
             x = np.array([[self.trainData.wordToID['[']]])
-            probs1, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
-            for word in characters:
-                if self.trainData.wordToID.get(word) == None:
-                    print("胖虎不认识这个字，你真是文化人！")
-                    exit(0)
-                flag = -flag
-                while word not in [']', '，', '。', ' ', '？', '！']:
-                    poem += word
-                    x = np.array([[self.trainData.wordToID[word]]])
-                    probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
-                    word = self.probsToWord(probs2, self.trainData.words)
+            for character in characters:
+                print('input:%s'%character)
+                for ii in range(num):
+                    probs1, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state0})
+                    for word in character:
+                        if self.trainData.wordToID.get(word) == None:
+                            print("我不认识这个字，你真是文化人！")
+                            exit(0)
+                        flag = -flag
+                        while word not in [']', '，', '。', ' ', '？', '！']:
+                            poem += word
+                            x = np.array([[self.trainData.wordToID[word]]])
+                            probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
+                            word = self.probsToWord(probs2, self.trainData.words)
 
-                poem += endSign[flag]
-                # keep the context, state must be updated
-                if endSign[flag] == '。':
-                    probs2, state = sess.run([probs, finalState],
-                                             feed_dict={gtX: np.array([[self.trainData.wordToID["。"]]]), initState: state})
-                    poem += '\n'
-                else:
-                    probs2, state = sess.run([probs, finalState],
-                                             feed_dict={gtX: np.array([[self.trainData.wordToID["，"]]]), initState: state})
-
-            print(characters)
-            print(poem)
+                        poem += endSign[flag]
+                        # keep the context, state must be updated
+                        if endSign[flag] == '。':
+                            probs2, state = sess.run([probs, finalState],
+                                                     feed_dict={gtX: np.array([[self.trainData.wordToID["。"]]]), initState: state})
+                            poem += '\n'
+                        else:
+                            probs2, state = sess.run([probs, finalState],
+                                                     feed_dict={gtX: np.array([[self.trainData.wordToID["，"]]]), initState: state})
+                    print('outputs-%d:'%ii)
+                    print(poem)
             return poem

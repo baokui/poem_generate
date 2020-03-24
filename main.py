@@ -27,5 +27,4 @@ if __name__ == "__main__":
         if args.mode == "test":
             poems = MCPangHu.test()
         else:
-            characters = input("please input chinese character:")
             poems = MCPangHu.testHead(characters)
