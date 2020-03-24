@@ -55,9 +55,9 @@ def separate(path_source,path_target_shi,path_target_ci):
         t = data[i].split('::')
         s = splitting(t)
         if check(s):
-            s_shi.append(t)
+            s_shi.append(data[i])
         else:
-            s_ci.append(t)
+            s_ci.append(data[i])
     with open(path_target_shi,'w') as f:
         f.write('\n'.join(s_shi))
     with open(path_target_ci,'w') as f:
