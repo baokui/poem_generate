@@ -50,6 +50,8 @@ def separate(path_source,path_target_shi,path_target_ci):
     s_shi = []
     s_ci = []
     for i in range(len(data)):
+        if i%1000==0:
+            print(i,len(data))
         t = data[i].split('::')
         s = splitting(t)
         if check(s):
