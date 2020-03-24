@@ -5,4 +5,5 @@
 #nohup /root/anaconda3/envs/pytorch/bin/python3.6 main.py -m head >> log/head.log 2>&1 &
 
 export CUDA_VISIBLE_DEVICES=1
-nohup /root/anaconda3/envs/pytorch/bin/python3.6 main.py -m train >> log/train-emb.log 2>&1 &
+#nohup /root/anaconda3/envs/pytorch/bin/python3.6 main.py -m train >> log/train-emb.log 2>&1 &
+nohup /root/anaconda3/envs/pytorch/bin/python3.6 main.py -m head >> log/head-emb.log 2>&1 &
