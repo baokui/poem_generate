@@ -26,14 +26,12 @@ generateNum = 5                   # number of generated poems per time
 type = "poetryAll"                   # dataset to use, shijing, songci, etc
 trainPoems = "../data/" + type + "/" + type + ".txt" # training file location
 path_word2vec = '/search/odin/guobk/vpa/data/w2v_sishuwujing.json'
-checkpointsPath = "./checkpoints/" + type # checkpoints location
+checkpointsPath = "./checkpoints_emb/" + type # checkpoints location
 
 saveStep = 1000                   # save model every savestep
 
-
-
 # evaluate
 trainRatio = 0.8                    # train percentage
-evaluateCheckpointsPath = "./checkpoints/evaluate"
+evaluateCheckpointsPath = "./checkpoints_emb/evaluate"
 
 characters = ['笑傲江湖','生日快乐']
