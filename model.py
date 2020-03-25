@@ -228,6 +228,7 @@ class MODEL:
                             #break
                         poem += endSign[flag]
                         # keep the context, state must be updated
+                        print(poem)
                         if endSign[flag] == '。':
                             probs2, state = sess.run([probs, finalState],
                                                      feed_dict={gtX: np.array([[self.trainData.wordToID["。"]]]), initState: state})
