@@ -213,7 +213,10 @@ class MODEL:
                     poem = character
                     while True:
                         flag = -flag
-                        x = np.array([[self.trainData.wordToID[ww]] for ww in poem])
+                        for ww in character:
+                            x = np.array([[self.trainData.wordToID[ww]]])
+                            probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
+                        x = np.array([[self.trainData.wordToID[poem[-1]]]])
                         probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
                         word = self.probsToWord(probs2, self.trainData.words)
                         while word not in [']', '，', '。', ' ', '？', '！']:
