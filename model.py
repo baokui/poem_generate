@@ -183,3 +183,58 @@ class MODEL:
                     print('outputs-%d:'%ii)
                     print(poem)
             return poem
+    def testHeader(self, characters,num=5):
+        """write head poem"""
+        print("genrating...")
+        gtX = tf.placeholder(tf.int32, shape=[1, None])  # input
+        logits, probs, stackCell, initState, finalState = self.buildModel(self.trainData.wordNum, gtX)
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            saver = tf.train.Saver()
+            checkPoint = tf.train.get_checkpoint_state(checkpointsPath)
+            # if have checkPoint, restore checkPoint
+            if checkPoint and checkPoint.model_checkpoint_path:
+                saver.restore(sess, checkPoint.model_checkpoint_path)
+                print("restored %s" % checkPoint.model_checkpoint_path)
+            else:
+                print("no checkpoint found!")
+                exit(1)
+            flag = 1
+            endSign = {-1: "，", 1: "。"}
+            state0 = sess.run(stackCell.zero_state(1, tf.float32))
+            x = np.array([[self.trainData.wordToID['[']]])
+            for character in characters:
+                print('input:%s'%character)
+                S = []
+                while len(S)<num:
+                    probs1, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state0})
+                    n0 = 5
+                    n1 = 4
+                    poem = character
+                    while True:
+                        flag = -flag
+                        x = np.array([[self.trainData.wordToID[ww]] for ww in poem])
+                        probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
+                        word = self.probsToWord(probs2, self.trainData.words)
+                        while word not in [']', '，', '。', ' ', '？', '！']:
+                            poem += word
+                            x = np.array([[self.trainData.wordToID[word]]])
+                            probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
+                            word = self.probsToWord(probs2, self.trainData.words)
+                        if len(poem)!=n0:
+                            break
+                        poem += endSign[flag]
+                        # keep the context, state must be updated
+                        if endSign[flag] == '。':
+                            probs2, state = sess.run([probs, finalState],
+                                                     feed_dict={gtX: np.array([[self.trainData.wordToID["。"]]]), initState: state})
+                            poem += '\n'
+                            break
+                        else:
+                            probs2, state = sess.run([probs, finalState],
+                                                     feed_dict={gtX: np.array([[self.trainData.wordToID["，"]]]), initState: state})
+                    if len(poem)>=(n0+1)*n1:
+                        S.append(poem)
+                        print('outputs-%d:'%len(S))
+                        print(poem)
+            return S

@@ -26,5 +26,7 @@ if __name__ == "__main__":
     else:
         if args.mode == "test":
             poems = MCPangHu.test()
-        else:
+        elif args.mode == 'head':
             poems = MCPangHu.testHead(characters)
+        elif args.mode == 'header':
+            poems = MCPangHu.testHeader(header)

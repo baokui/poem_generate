@@ -35,3 +35,6 @@ trainRatio = 0.8                    # train percentage
 evaluateCheckpointsPath = "./checkpoints_emb/evaluate"
 
 characters = ['笑傲江湖','生日快乐']
+
+header = ['窗前','人生']
+
