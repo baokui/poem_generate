@@ -14,7 +14,7 @@ def defineArgs():
     """define args"""
     parser = argparse.ArgumentParser(description = "Chinese_poem_generator.")
     parser.add_argument("-m", "--mode", help = "select mode by 'train' or test or head",
-                        choices = ["train", "test", "head"], default = "test")
+                        choices = ["train", "test", "head","header"], default = "test")
     return parser.parse_args()
 
 if __name__ == "__main__":
