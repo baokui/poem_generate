@@ -224,8 +224,8 @@ class MODEL:
                             x = np.array([[self.trainData.wordToID[word]]])
                             probs2, state = sess.run([probs, finalState], feed_dict={gtX: x, initState: state})
                             word = self.probsToWord(probs2, self.trainData.words)
-                        if len(poem)!=n0:
-                            break
+                        #if len(poem)!=n0:
+                            #break
                         poem += endSign[flag]
                         # keep the context, state must be updated
                         if endSign[flag] == '。':
